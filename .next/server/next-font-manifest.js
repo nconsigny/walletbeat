@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/home/niardo/walletbeat/src/app/layout\":[\"static/media/bdfc0c838118e8d4-s.p.woff2\",\"static/media/6905431624c34d00-s.p.woff2\"],\"/home/niardo/walletbeat/src/app/beta/layout\":[\"static/media/bdfc0c838118e8d4-s.p.woff2\",\"static/media/6905431624c34d00-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"

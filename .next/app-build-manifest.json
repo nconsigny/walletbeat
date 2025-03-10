@@ -1,0 +1,28 @@
+{
+  "pages": {
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/beta/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/beta/layout.css",
+      "static/chunks/app/beta/layout.js"
+    ],
+    "/beta/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/beta/page.css",
+      "static/chunks/app/beta/page.js"
+    ],
+    "/beta/wallet/[wallet]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/beta/wallet/[wallet]/page.css",
+      "static/chunks/app/beta/wallet/[wallet]/page.js"
+    ]
+  }
+}
