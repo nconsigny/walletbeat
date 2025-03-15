@@ -1,14 +1,15 @@
 import type React from 'react'
 import { type Content, isTypographicContent } from '@/types/content'
 import { RenderTypographicContent } from './RenderTypographicContent'
-import { AddressCorrelationDetails } from '@/ui/molecules/attributes/privacy/AddressCorrelationDetails'
-import { ChainVerificationDetails } from '@/ui/molecules/attributes/security/ChainVerificationDetails'
-import { FundingDetails } from '@/ui/molecules/attributes/transparency/FundingDetails'
-import { LicenseDetails } from '@/ui/molecules/attributes/transparency/LicenseDetails'
-import { SourceVisibilityDetails } from '@/ui/molecules/attributes/transparency/SourceVisibilityDetails'
-import { UnratedAttribute } from '@/ui/molecules/attributes/UnratedAttribute'
-import { SecurityAuditsDetails } from '@/ui/molecules/attributes/security/SecurityAuditsDetails'
-import { TransactionInclusionDetails } from '@/ui/molecules/attributes/self-sovereignty/TransactionInclusionDetails'
+import { AddressCorrelationDetails } from '@/components/ui/molecules/attributes/privacy/AddressCorrelationDetails'
+import { ChainVerificationDetails } from '@/components/ui/molecules/attributes/security/ChainVerificationDetails'
+import { FundingDetails } from '@/components/ui/molecules/attributes/transparency/FundingDetails'
+import { LicenseDetails } from '@/components/ui/molecules/attributes/transparency/LicenseDetails'
+import { SourceVisibilityDetails } from '@/components/ui/molecules/attributes/transparency/SourceVisibilityDetails'
+import { UnratedAttribute } from '@/components/ui/molecules/attributes/UnratedAttribute'
+import { SecurityAuditsDetails } from '@/components/ui/molecules/attributes/security/SecurityAuditsDetails'
+import { TransactionInclusionDetails } from '@/components/ui/molecules/attributes/self-sovereignty/TransactionInclusionDetails'
+import { ScamAlertDetails } from '../molecules/attributes/security/ScamAlertDetails'
 
 export function RenderContent({
 	content,
@@ -29,6 +30,8 @@ export function RenderContent({
 			return <FundingDetails {...componentProps} {...otherProps} />
 		case 'LicenseDetails':
 			return <LicenseDetails {...componentProps} {...otherProps} />
+		case 'ScamAlertDetails':
+			return <ScamAlertDetails {...componentProps} {...otherProps} />
 		case 'SecurityAuditsDetails':
 			return <SecurityAuditsDetails {...componentProps} {...otherProps} />
 		case 'SourceVisibilityDetails':
