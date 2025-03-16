@@ -3,7 +3,7 @@ import React from 'react'
 export function ImageRobot(): React.JSX.Element {
     return (
         <div className="w-full px-1 -mt-1">
-            <div className="relative w-[200px] mx-auto">
+            <div className="relative w-[233px] mx-auto">
                 <img 
                     src="/wallet.robbot-flipped.png" 
                     alt="WalletBeat Robot"
