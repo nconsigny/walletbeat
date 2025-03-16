@@ -395,7 +395,7 @@ export function Navigation({
 			</div>
 
 			{/* Robot container */}
-			<div className="relative h-[250px] overflow-hidden -mt-1">
+			<div className="relative h-[288px] overflow-hidden -mt-1">
 				<div 
 					className={`absolute w-full transition-transform duration-500 ease-in-out ${
 						isAnyDropdownOpen 
