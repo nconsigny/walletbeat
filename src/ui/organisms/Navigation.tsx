@@ -1,8 +1,9 @@
 import { type NonEmptyArray, nonEmptyMap } from '@/types/utils/non-empty'
 import type { ListItemButton } from '@mui/material'
 import type { Box } from '@mui/system'
-import React, { memo, useState } from 'react'
+import React, { memo, useState, useRef, useEffect } from 'react'
 import { ThemeSwitcher } from './ThemeSwitcher'
+import { ImageRobot } from './imageRobot'
 
 /**
  * Size of the navigation menu, in pixels.
@@ -334,10 +335,35 @@ export function Navigation({
 	onContentItemClick?: (item: NavigationContentItem) => void
 	prefix?: React.ReactNode
 }): React.JSX.Element {
+	const [isAnyDropdownOpen, setIsAnyDropdownOpen] = useState(false);
+	const navigationRef = useRef<HTMLDivElement>(null);
+
+	// Function to check if any dropdown is open by looking for elements with max-h-96
+	const checkDropdowns = () => {
+		if (navigationRef.current) {
+			const openDropdowns = navigationRef.current.querySelectorAll('ul[class*="max-h-96"]');
+			setIsAnyDropdownOpen(openDropdowns.length > 0);
+		}
+	};
+
+	// Set up mutation observer to watch for changes in the navigation
+	useEffect(() => {
+		const observer = new MutationObserver(checkDropdowns);
+		if (navigationRef.current) {
+			observer.observe(navigationRef.current, {
+				attributes: true,
+				subtree: true,
+				attributeFilter: ['class']
+			});
+		}
+		return () => observer.disconnect();
+	}, []);
+
 	return (
 		<div
 			key="navigationBox"
-			className="flex flex-col gap-0 w-full md:max-w-[300px] flex-0 py-6 sticky top-0 h-screen overflow-y-auto"
+			ref={navigationRef}
+			className="flex flex-col w-full md:max-w-[300px] flex-0 py-6 sticky top-0 h-screen relative"
 		>
 			<div className="flex justify-between items-center w-full gap-1 px-6 mb-3">
 				<a href="/" className="text-xl text-accent font-bold italic whitespace-nowrap">
@@ -353,16 +379,32 @@ export function Navigation({
 				</div>
 			)}
 			
-			<div className="flex flex-col gap-2 px-3">
-				{nonEmptyMap(groups, (group, groupIndex) => (
-					<NavigationGroup
-						key={`navigationGroup-${group.id}`}
-						group={group}
-						groupIndex={groupIndex}
-						onContentItemClick={onContentItemClick}
-						activeItemId={activeItemId}
-					/>
-				))}
+			{/* Scrollable navigation area with flex-grow */}
+			<div className="flex-grow overflow-y-auto">
+				<div className="flex flex-col gap-2 px-3">
+					{nonEmptyMap(groups, (group, groupIndex) => (
+						<NavigationGroup
+							key={`navigationGroup-${group.id}`}
+							group={group}
+							groupIndex={groupIndex}
+							onContentItemClick={onContentItemClick}
+							activeItemId={activeItemId}
+						/>
+					))}
+				</div>
+			</div>
+
+			{/* Robot container */}
+			<div className="relative h-[250px] overflow-hidden -mt-1">
+				<div 
+					className={`absolute w-full transition-transform duration-500 ease-in-out ${
+						isAnyDropdownOpen 
+							? 'translate-y-[300%]' 
+							: 'translate-y-0'
+					}`}
+				>
+					<ImageRobot />
+				</div>
 			</div>
 		</div>
 	)

@@ -8,7 +8,6 @@ import {
 	isNavigationContentItem,
 	type NavigationItem,
 } from '@/ui/organisms/Navigation'
-import { ImageRobot } from '@/ui/organisms/imageRobot'
 import type { NonEmptyArray } from '@/types/utils/non-empty'
 
 const scrollNavigationMargin = 8
@@ -174,10 +173,6 @@ export function NavigationPageLayout({
 					<div className="px-1 md:px-2 mx-auto max-w-6xl 2xl:max-w-screen-2xl w-full">
 					{children}
 					</div>
-				</div>
-
-				<div className="fixed left-0 bottom-0 w-[200px] z-30 pointer-events-none">
-					<ImageRobot />
 				</div>
 			</div>
 		</ThemeProvider>
