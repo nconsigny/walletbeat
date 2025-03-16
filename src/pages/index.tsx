@@ -116,13 +116,12 @@ export const HomePage: FC = () =>
 						<p>Alpha version; work in progress. For content contributions, please see <a href="https://github.com/fluidkey/walletbeat" className="link" target="_blank" rel="noreferrer">GitHub</a>.</p>
 					</div>
 					<div className="flex items-center">
-						<img src="/banner.png" className="h-[210px] w-auto" />
+						<img src="/banner.png" className="h-[195px] w-auto" />
 					</div>
 				</div>
 			</div>
 
 			<div className="w-full flex flex-col gap-2">
-				<h2 className="font-bold">Find a wallet that suits you</h2>
 				<div className="flex gap-4 w-full flex-wrap xl:flex-nowrap flex-col xl:flex-row">
 					{
 						[
@@ -150,7 +149,6 @@ export const HomePage: FC = () =>
 			</div>
 
 			<div className="w-full flex flex-col gap-2">
-				<h2 className="font-bold">Explore all the wallets</h2>
 				<WalletTable />
 			</div>
 

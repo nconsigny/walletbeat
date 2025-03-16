@@ -7,7 +7,7 @@ import { ThemeSwitcher } from './ThemeSwitcher'
 /**
  * Size of the navigation menu, in pixels.
  */
-const drawerWidth = 280
+const drawerWidth = 220
 
 /**
  * A navigation item in the navigation menu.
@@ -129,7 +129,7 @@ interface NavigationItemProps {
 const NavigationItem = memo(
 	function NavigationItem({ item, active, depth }: NavigationItemProps): React.JSX.Element {
 		const [isOpen, setIsOpen] = useState(false);
-		const linkStyles = "whitespace-nowrap flex flex-row items-center gap-2 py-0.5 hover:bg-backgroundSecondary rounded-md px-4";
+		const linkStyles = "whitespace-nowrap flex flex-row items-center gap-1.5 py-0.5 hover:bg-backgroundSecondary rounded-md px-3";
 		const hasChildren = (item.children?.length ?? 0) > 0;
 
 		const toggleDropdown = (e: React.MouseEvent) => {
@@ -337,10 +337,10 @@ export function Navigation({
 	return (
 		<div
 			key="navigationBox"
-			className="flex flex-col gap-0 w-full md:max-w-xs flex-0 py-8 sticky top-0 h-screen overflow-y-auto"
+			className="flex flex-col gap-0 w-full md:max-w-[300px] flex-0 py-6 sticky top-0 h-screen overflow-y-auto"
 		>
-			<div className="flex justify-between items-center w-full gap-4 px-8 mb-4">
-				<a href="/" className="text-2xl text-accent font-bold italic whitespace-nowrap">
+			<div className="flex justify-between items-center w-full gap-3 px-6 mb-3">
+				<a href="/" className="text-xl text-accent font-bold italic whitespace-nowrap">
 					~ WalletBeat
 				</a>
 				<ThemeSwitcher />
@@ -348,12 +348,12 @@ export function Navigation({
 			
 			{/* Desktop Search Component - ensures the search is always visible on desktop */}
 			{prefix && (
-				<div className="px-8 mb-6 w-full">
+				<div className="px-6 mb-4 w-full">
 					{prefix}
 				</div>
 			)}
 			
-			<div className="flex flex-col gap-2 px-4">
+			<div className="flex flex-col gap-2 px-3">
 				{nonEmptyMap(groups, (group, groupIndex) => (
 					<NavigationGroup
 						key={`navigationGroup-${group.id}`}
