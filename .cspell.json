@@ -9,8 +9,10 @@
     "brandable",
     "Buterin",
     "bypassable",
+    "certora",
     "Chainalysis",
     "checkmark",
+    "cmdk",
     "codesandbox",
     "colorlinks",
     "Consensys",
@@ -35,6 +37,7 @@
     "fontspec",
     "FOSS",
     "Frontends",
+    "gridplus",
     "hmargin",
     "Interrobang",
     "IPFS",
@@ -51,6 +54,7 @@
     "moritz",
     "mtsx",
     "Multifactor",
+    "NGRAVE",
     "noninteractive",
     "Noto",
     "npmjs",
@@ -86,7 +90,8 @@
     "Vitalik",
     "vmargin",
     "walletbeat",
-    "Warpcast"
+    "Warpcast",
+    "Yanssie"
   ],
   "flagWords": [],
   "ignorePaths": [

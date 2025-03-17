@@ -21,6 +21,10 @@ export const cantina: CorporateEntity & SecurityAuditor = {
 	},
 	jurisdiction: 'United States',
 	url: 'https://cantina.xyz/',
-	privacyPolicy: null,
-	crunchbase: null,
-} 
+	repoUrl: { type: 'NO_REPO' },
+	privacyPolicy: 'https://cantina.xyz/privacy-policy',
+	crunchbase: { type: 'NO_CRUNCHBASE_URL' },
+	linkedin: { type: 'NO_LINKEDIN_URL' },
+	twitter: 'https://x.com/cantinaxyz',
+	farcaster: { type: 'NO_FARCASTER_PROFILE' },
+}

@@ -2,12 +2,15 @@ import { type NonEmptyArray, nonEmptyMap } from '@/types/utils/non-empty'
 import type { ListItemButton } from '@mui/material'
 import type { Box } from '@mui/system'
 import React, { memo, useState, useRef, useEffect } from 'react'
+import React, { memo, useState, useRef, useEffect } from 'react'
 import { ThemeSwitcher } from './ThemeSwitcher'
+import { ImageRobot } from './imageRobot'
 import { ImageRobot } from './imageRobot'
 
 /**
  * Size of the navigation menu, in pixels.
  */
+const drawerWidth = 220
 const drawerWidth = 220
 
 /**
@@ -130,6 +133,7 @@ interface NavigationItemProps {
 const NavigationItem = memo(
 	function NavigationItem({ item, active, depth }: NavigationItemProps): React.JSX.Element {
 		const [isOpen, setIsOpen] = useState(false);
+		const linkStyles = "whitespace-nowrap flex flex-row items-center gap-1.5 py-0.5 hover:bg-backgroundSecondary rounded-md px-3";
 		const linkStyles = "whitespace-nowrap flex flex-row items-center gap-1.5 py-0.5 hover:bg-backgroundSecondary rounded-md px-3";
 		const hasChildren = (item.children?.length ?? 0) > 0;
 
@@ -443,6 +447,8 @@ export function Navigation({
 			key="navigationBox"
 			ref={navigationRef}
 			className="flex flex-col w-full md:max-w-[300px] flex-0 py-6 sticky top-0 h-screen relative"
+			ref={navigationRef}
+			className="flex flex-col w-full md:max-w-[300px] flex-0 py-6 sticky top-0 h-screen relative"
 		>
 			<div className="flex justify-between items-center w-full gap-1 px-6 mb-3">
 				<a href="/" className="text-xl text-accent font-bold italic whitespace-nowrap flex items-center gap-1 relative">
@@ -464,6 +470,7 @@ export function Navigation({
 			
 			{/* Desktop Search Component - ensures the search is always visible on desktop */}
 			{prefix && (
+				<div className="px-6 mb-4 w-full">
 				<div className="px-6 mb-4 w-full">
 					{prefix}
 				</div>

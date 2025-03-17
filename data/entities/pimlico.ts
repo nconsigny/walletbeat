@@ -21,6 +21,10 @@ export const pimlico: CorporateEntity & TransactionBroadcastProvider = {
 	},
 	jurisdiction: 'London, England, United Kingdom',
 	url: 'https://www.pimlico.io/',
+	repoUrl: 'https://github.com/pimlicolabs',
 	privacyPolicy: 'https://www.pimlico.io/privacy',
 	crunchbase: 'https://www.crunchbase.com/organization/pimlico',
+	linkedin: { type: 'NO_LINKEDIN_URL' },
+	twitter: 'https://x.com/pimlicoHQ',
+	farcaster: 'https://warpcast.com/pimlico',
 }

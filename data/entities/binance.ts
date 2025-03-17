@@ -19,6 +19,10 @@ export const binance: CorporateEntity & Exchange = {
 	},
 	jurisdiction: 'Malta',
 	url: 'https://binance.com/',
+	repoUrl: 'https://github.com/binance',
 	privacyPolicy: 'https://www.binance.com/en/about-legal/privacy-portal',
 	crunchbase: 'https://www.crunchbase.com/organization/binance',
+	linkedin: { type: 'NO_LINKEDIN_URL' },
+	twitter: 'https://x.com/binance',
+	farcaster: { type: 'NO_FARCASTER_PROFILE' },
 }
