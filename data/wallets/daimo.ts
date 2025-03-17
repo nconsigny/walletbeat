@@ -20,6 +20,7 @@ import { PasskeyVerificationLibrary } from '@/schema/features/security/passkey-v
 import { nconsigny } from '../contributors/nconsigny'
 import { WalletTypeCategory, SmartWalletStandard } from '@/schema/features/wallet-type'
 import { Variant } from '@/schema/variants'
+import { FeeTransparencyLevel } from '@/schema/features/transparency/fee-transparency'
 
 export const daimo: Wallet = {
 	metadata: {
@@ -327,7 +328,21 @@ export const daimo: Wallet = {
 			],
 		},
 		transparency: {
-			feeTransparency: null,
+			feeTransparency: {
+				level: FeeTransparencyLevel.COMPREHENSIVE,
+				disclosesWalletFees: true,
+				showsTransactionPurpose: true,
+				ref: [
+					{
+						explanation: 'Daimo clearly shows transaction fees in the confirmation screen with a detailed breakdown before users approve transactions.',
+						url: 'https://github.com/daimo-eth/daimo/tree/master/apps/daimo-mobile/src/view/screen/send'
+					},
+					{
+						explanation: 'Daimo transparently displays transaction purpose and recipient information in a clear format.',
+						url: 'https://github.com/daimo-eth/daimo/tree/master/apps/daimo-mobile/src/view/screen/send'
+					}
+				]
+			},
 		},
 	},
 	overrides: {

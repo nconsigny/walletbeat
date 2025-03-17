@@ -1,4 +1,5 @@
 import type { NonEmptyRecord } from '@/types/utils/non-empty'
+import type { WithRef } from '../reference'
 
 /** A supported feature. */
 export type Supported<T = object> = T & {
@@ -25,7 +26,7 @@ export const notSupported: NotSupported = { support: 'NOT_SUPPORTED' } as const
 export const featureSupported: Supported = { support: 'SUPPORTED' } as const
 
 /** A feature that may or may not be supported. */
-export type Support<T = object> = NotSupported | Supported<T>
+export type Support<T = object> = WithRef<NotSupported | Supported<T>>
 
 /** Type predicate for `Supported<T>` */
 export function isSupported<T>(support: Support<T>): support is Supported<T> {

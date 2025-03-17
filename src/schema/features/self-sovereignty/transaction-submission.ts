@@ -1,4 +1,5 @@
 import type { Support } from '../support'
+import type { WithRef } from '@/schema/reference'
 
 /** L2 types considered for transaction submission. */
 export type TransactionSubmissionL2Type =
@@ -62,5 +63,5 @@ export interface TransactionSubmission {
 	}
 
 	/** Options for broadcasting transactions to L2 chains. */
-	l2: Record<TransactionSubmissionL2Type, TransactionSubmissionL2Support | null>
+	l2: Record<TransactionSubmissionL2Type, WithRef<TransactionSubmissionL2Support> | null>
 }

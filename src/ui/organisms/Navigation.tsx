@@ -366,8 +366,16 @@ export function Navigation({
 			className="flex flex-col w-full md:max-w-[300px] flex-0 py-6 sticky top-0 h-screen relative"
 		>
 			<div className="flex justify-between items-center w-full gap-1 px-6 mb-3">
-				<a href="/" className="text-xl text-accent font-bold italic whitespace-nowrap">
-					~ WalletBeat
+				<a href="/" className="text-xl text-accent font-bold italic whitespace-nowrap flex items-center gap-1">
+					<span className={`transition-opacity duration-500 ease-in-out ${isAnyDropdownOpen ? 'opacity-0 w-0 absolute' : 'opacity-100'}`}>
+						~
+					</span>
+					<img 
+						src="/images/icon.png" 
+						alt="WalletBeat Icon" 
+						className={`h-16 w-13 transition-opacity duration-500 ease-in-out ${isAnyDropdownOpen ? 'opacity-100' : 'opacity-0 w-0 absolute'}`} 
+					/>
+					<span>WalletBeat</span>
 				</a>
 				<ThemeSwitcher />
 			</div>
@@ -397,10 +405,10 @@ export function Navigation({
 			{/* Robot container */}
 			<div className="relative h-[288px] overflow-hidden -mt-1">
 				<div 
-					className={`absolute w-full transition-transform duration-500 ease-in-out ${
+					className={`absolute w-full transition-opacity duration-500 ease-in-out ${
 						isAnyDropdownOpen 
-							? 'translate-y-[300%]' 
-							: 'translate-y-0'
+							? 'opacity-0' 
+							: 'opacity-100'
 					}`}
 				>
 					<ImageRobot />
