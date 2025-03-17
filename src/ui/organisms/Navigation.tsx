@@ -5,6 +5,17 @@ import React, { memo, useState, useRef, useEffect } from 'react'
 import { ThemeSwitcher } from './ThemeSwitcher'
 import { ImageRobot } from './imageRobot'
 
+// Add global CSS classes for hiding scrollbars
+const globalStyles = `
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+.scrollbar-hide {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+`
+
 /**
  * Size of the navigation menu, in pixels.
  */
@@ -131,7 +142,7 @@ const NavigationItem = memo(
 	function NavigationItem({ item, active, depth }: NavigationItemProps): React.JSX.Element {
 		const [isOpen, setIsOpen] = useState(false)
 		const linkStyles =
-			'whitespace-nowrap flex flex-row items-center gap-1.5 py-0.5 hover:bg-backgroundSecondary rounded-md px-3'
+			'flex flex-row items-left gap-1 py-0.15 hover:bg-backgroundSecondary rounded-md px-0.5 pl-0'
 		const hasChildren = (item.children?.length ?? 0) > 0
 
 		const toggleDropdown = (e: React.MouseEvent) => {
@@ -337,6 +348,7 @@ export function Navigation({
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const iconTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const animationRef = useRef<number | null>(null)
+	const wasDropdownOpenRef = useRef(false)
 
 	// Function to animate opacity change smoothly
 	const animateOpacity = (start: number, end: number, duration: number) => {
@@ -373,39 +385,59 @@ export function Navigation({
 			const openDropdowns = navigationRef.current.querySelectorAll('ul[class*="max-h-96"]')
 			const isOpen = openDropdowns.length > 0
 
+			// Only trigger state changes if we're transitioning between states
+			const isTransitioning = wasDropdownOpenRef.current !== isOpen
+
 			// Set container size immediately
 			setIsAnyDropdownOpen(isOpen)
 
-			// Clear any existing timeouts to prevent multiple animations
-			if (timeoutRef.current) {
-				clearTimeout(timeoutRef.current)
-			}
-			if (iconTimeoutRef.current) {
-				clearTimeout(iconTimeoutRef.current)
-			}
+			// Only trigger animations if we're transitioning between states
+			if (isTransitioning) {
+				// Clear any existing timeouts to prevent multiple animations
+				if (timeoutRef.current) {
+					clearTimeout(timeoutRef.current)
+				}
+				if (iconTimeoutRef.current) {
+					clearTimeout(iconTimeoutRef.current)
+				}
 
-			// Create smooth transition for robot and icon
-			if (isOpen) {
-				// Show icon with smooth animation after a delay
-				iconTimeoutRef.current = setTimeout(() => {
-					animateOpacity(0, 1, 1500) // Fade in over 1.5 seconds
-				}, 500)
+				// Create smooth transition for robot and icon
+				if (isOpen) {
+					// Show icon with smooth animation after a delay
+					iconTimeoutRef.current = setTimeout(() => {
+						animateOpacity(0, 1, 1500) // Fade in over 1.5 seconds
+					}, 500)
 
-				// Delay hiding the robot
-				timeoutRef.current = setTimeout(() => {
+					// Make robot disappear instantly
 					setRobotVisible(false)
-				}, 200)
-			} else {
-				// Hide icon with smooth animation
-				animateOpacity(iconOpacity, 0, 800) // Fade out over 0.8 seconds
+				} else {
+					// Hide icon with smooth animation
+					animateOpacity(iconOpacity, 0, 800) // Fade out over 0.8 seconds
 
-				// Delay showing the robot to prevent flickering
-				timeoutRef.current = setTimeout(() => {
-					setRobotVisible(true)
-				}, 300)
+					// Delay showing the robot to prevent flickering
+					timeoutRef.current = setTimeout(() => {
+						setRobotVisible(true)
+					}, 300)
+				}
 			}
+
+			// Update our ref to the current state for next time
+			wasDropdownOpenRef.current = isOpen
 		}
 	}
+
+	// Add the scrollbar hiding styles
+	useEffect(() => {
+		// Add the styles to the document head
+		const styleElement = document.createElement('style')
+		styleElement.innerHTML = globalStyles
+		document.head.appendChild(styleElement)
+
+		// Clean up function to remove the styles when the component unmounts
+		return () => {
+			document.head.removeChild(styleElement)
+		}
+	}, [])
 
 	// Clean up timeouts and animations on unmount
 	useEffect(() => {
@@ -455,7 +487,7 @@ export function Navigation({
 						<img
 							src="/images/icon.png"
 							alt="WalletBeat Icon"
-							className="h-16 w-13 absolute left+10 -top-[35px]"
+							className="h-14 w-12 absolute left+10 -top-[35px]"
 							style={{ opacity: iconOpacity }}
 						/>
 					</span>
@@ -468,8 +500,8 @@ export function Navigation({
 			{prefix && <div className="px-6 mb-4 w-full">{prefix}</div>}
 
 			{/* Scrollable navigation area with flex-grow and auto-height when dropdowns are open */}
-			<div className={`flex-grow ${isAnyDropdownOpen ? 'overflow-visible' : 'overflow-y-auto'}`}>
-				<div className="flex flex-col gap-2 px-3">
+			<div className="flex-grow overflow-y-auto scrollbar-hide">
+				<div className="flex flex-col gap-0 px-0 -ml-1">
 					{nonEmptyMap(groups, (group, groupIndex) => (
 						<NavigationGroup
 							key={`navigationGroup-${group.id}`}
@@ -482,11 +514,13 @@ export function Navigation({
 				</div>
 			</div>
 
-			{/* Robot container with consistent positioning */}
-			<div className="relative h-[288px] overflow-hidden -mt-1">
+			{/* Robot container with consistent positioning - shrinks when dropdowns are open */}
+			<div
+				className={`relative ${isAnyDropdownOpen ? 'h-[100px]' : 'h-[288px]'} overflow-hidden -mt-1 transition-all duration-300`}
+			>
 				<div
-					className={`absolute w-full transition-opacity duration-500 ease-in-out ${
-						robotVisible ? 'opacity-100' : 'opacity-0'
+					className={`absolute w-full ${
+						robotVisible ? 'transition-opacity duration-1000 ease-in-out opacity-100' : 'opacity-0'
 					}`}
 				>
 					<ImageRobot />
