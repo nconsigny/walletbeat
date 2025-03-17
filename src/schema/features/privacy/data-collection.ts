@@ -102,7 +102,7 @@ export enum MultiAddressPolicy {
  * should be judged by is the one that applies by default once a second
  * address is added.
  */
-export type MultiAddressHandling =
+export type MultiAddressHandling = WithRef<
 	| {
 		/** How the wallet handles refreshing data for multiple addresses. */
 		type: MultiAddressPolicy.ACTIVE_ADDRESS_ONLY
@@ -143,6 +143,7 @@ export type MultiAddressHandling =
 		 */
 		timing: 'SIMULTANEOUS' | 'STAGGERED'
 	}
+>
 
 /**
  * @param leak Some leak level.

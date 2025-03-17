@@ -447,11 +447,11 @@ function walletTableColumn<Vs extends ValueSet>(
 
 /** Get sorting weight for wallet type */
 function getWalletTypeSortWeight(row: WalletRow): number {
-	const standards = row.getSmartWalletStandards()
-	const categories = row.getWalletTypeCategories()
-
-	// Smart Wallets first
-	if (categories.includes(WalletTypeCategory.SMART_WALLET)) {
+	const standards = row.getSmartWalletStandards();
+	const categories = row.getWalletTypeCategories();
+	
+	// SW-only wallets first
+	if (categories.length === 1 && categories.includes(WalletTypeCategory.SMART_WALLET)) {
 		// ERC-4337 wallets first
 		if (standards?.includes(SmartWalletStandard.ERC_4337)) {
 			return 1
@@ -463,19 +463,19 @@ function getWalletTypeSortWeight(row: WalletRow): number {
 		// Other smart wallets third
 		return 3
 	}
-
+	
 	// EOA wallets fourth
 	if (categories.includes(WalletTypeCategory.EOA)) {
-		return 4
+		return 4;
 	}
-
+	
 	// Hardware wallets last
 	if (categories.includes(WalletTypeCategory.HARDWARE_WALLET)) {
-		return 5
+		return 5;
 	}
 
 	// Unknown types at the very end
-	return 6
+	return 6;
 }
 
 /** Main wallet comparison table. */
@@ -527,8 +527,8 @@ export default function WalletTable(): React.JSX.Element {
 		field: 'displayName',
 		headerName: 'Wallet',
 		type: 'string',
-		width: 310,
-		minWidth: 310,
+		width: 295,
+		minWidth: 295,
 		flex: 0.7,
 		valueGetter: (_: never, row: WalletRow): string => row.wallet.metadata.displayName,
 		renderCell: params => <Box sx={{ fontSize: '0.9rem' }}>{params.row.renderName()}</Box>,
@@ -657,6 +657,11 @@ export default function WalletTable(): React.JSX.Element {
 							filter: {
 								filterModel: {
 									items: [],
+								},
+							},
+							pagination: {
+								paginationModel: {
+									pageSize: 100,
 								},
 							},
 						}}

@@ -408,7 +408,11 @@ export function WalletRatingCell<Vs extends ValueSet>({
 										Source
 									</Typography>
 									
-									{qualifiedReferences.map((ref, refIndex) => (
+									{qualifiedReferences.map((ref, refIndex) => {
+										// Debug logging
+										console.log(`Reference ${refIndex} explanation:`, ref.explanation);
+										
+										return (
 										<Box key={refIndex} sx={{ mb: refIndex < qualifiedReferences.length - 1 ? 1 : 0 }}>
 											{/* Reference links */}
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 0.5 }}>
@@ -456,7 +460,8 @@ export function WalletRatingCell<Vs extends ValueSet>({
 												</Typography>
 											)}
 										</Box>
-									))}
+										);
+									})}
 								</Box>
 							)}
 							
