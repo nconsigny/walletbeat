@@ -336,15 +336,94 @@ export function Navigation({
 	prefix?: React.ReactNode
 }): React.JSX.Element {
 	const [isAnyDropdownOpen, setIsAnyDropdownOpen] = useState(false);
+	const [robotVisible, setRobotVisible] = useState(true);
+	const [iconOpacity, setIconOpacity] = useState(0);
 	const navigationRef = useRef<HTMLDivElement>(null);
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const iconTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const animationRef = useRef<number | null>(null);
+
+	// Function to animate opacity change smoothly
+	const animateOpacity = (start: number, end: number, duration: number) => {
+		let startTime: number | null = null;
+		
+		// Cancel any ongoing animation
+		if (animationRef.current !== null) {
+			cancelAnimationFrame(animationRef.current);
+		}
+		
+		// Animation function
+		const animate = (timestamp: number) => {
+			if (!startTime) startTime = timestamp;
+			const elapsedTime = timestamp - startTime;
+			const progress = Math.min(elapsedTime / duration, 1);
+			const currentOpacity = start + (end - start) * progress;
+			
+			setIconOpacity(currentOpacity);
+			
+			if (progress < 1) {
+				animationRef.current = requestAnimationFrame(animate);
+			}
+		};
+		
+		// Start animation
+		animationRef.current = requestAnimationFrame(animate);
+	};
 
 	// Function to check if any dropdown is open by looking for elements with max-h-96
 	const checkDropdowns = () => {
 		if (navigationRef.current) {
 			const openDropdowns = navigationRef.current.querySelectorAll('ul[class*="max-h-96"]');
-			setIsAnyDropdownOpen(openDropdowns.length > 0);
+			const isOpen = openDropdowns.length > 0;
+			
+			// Set container size immediately
+			setIsAnyDropdownOpen(isOpen);
+			
+			// Clear any existing timeouts to prevent multiple animations
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+			if (iconTimeoutRef.current) {
+				clearTimeout(iconTimeoutRef.current);
+			}
+			
+			// Create smooth transition for robot and icon
+			if (isOpen) {
+				// Show icon with smooth animation after a delay
+				iconTimeoutRef.current = setTimeout(() => {
+					animateOpacity(0, 1, 1500); // Fade in over 1.5 seconds
+				}, 500);
+				
+				// Delay hiding the robot
+				timeoutRef.current = setTimeout(() => {
+					setRobotVisible(false);
+				}, 200);
+			} else {
+				// Hide icon with smooth animation
+				animateOpacity(iconOpacity, 0, 800); // Fade out over 0.8 seconds
+				
+				// Delay showing the robot to prevent flickering
+				timeoutRef.current = setTimeout(() => {
+					setRobotVisible(true);
+				}, 300);
+			}
 		}
 	};
+
+	// Clean up timeouts and animations on unmount
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+			if (iconTimeoutRef.current) {
+				clearTimeout(iconTimeoutRef.current);
+			}
+			if (animationRef.current !== null) {
+				cancelAnimationFrame(animationRef.current);
+			}
+		};
+	}, []);
 
 	// Set up mutation observer to watch for changes in the navigation
 	useEffect(() => {
@@ -366,16 +445,19 @@ export function Navigation({
 			className="flex flex-col w-full md:max-w-[300px] flex-0 py-6 sticky top-0 h-screen relative"
 		>
 			<div className="flex justify-between items-center w-full gap-1 px-6 mb-3">
-				<a href="/" className="text-xl text-accent font-bold italic whitespace-nowrap flex items-center gap-1">
-					<span className={`transition-opacity duration-500 ease-in-out ${isAnyDropdownOpen ? 'opacity-0 w-0 absolute' : 'opacity-100'}`}>
+				<a href="/" className="text-xl text-accent font-bold italic whitespace-nowrap flex items-center gap-1 relative">
+					<span className={`transition-opacity duration-800 ease-in-out ${isAnyDropdownOpen ? 'opacity-0' : 'opacity-100'} absolute left-10`}>
 						~
 					</span>
-					<img 
-						src="/images/icon.png" 
-						alt="WalletBeat Icon" 
-						className={`h-16 w-13 transition-opacity duration-500 ease-in-out ${isAnyDropdownOpen ? 'opacity-100' : 'opacity-0 w-0 absolute'}`} 
-					/>
-					<span>WalletBeat</span>
+					<span className="relative w-16 h-13 inline-block">
+						<img 
+							src="/images/icon.png" 
+							alt="WalletBeat Icon" 
+							className="h-16 w-13 absolute left-5 -top-[35px]"
+							style={{ opacity: iconOpacity }}
+						/>
+					</span>
+					<span className="ml-1">WalletBeat</span>
 				</a>
 				<ThemeSwitcher />
 			</div>
@@ -387,8 +469,8 @@ export function Navigation({
 				</div>
 			)}
 			
-			{/* Scrollable navigation area with flex-grow */}
-			<div className="flex-grow overflow-y-auto">
+			{/* Scrollable navigation area with flex-grow and auto-height when dropdowns are open */}
+			<div className={`flex-grow ${isAnyDropdownOpen ? 'overflow-visible' : 'overflow-y-auto'}`}>
 				<div className="flex flex-col gap-2 px-3">
 					{nonEmptyMap(groups, (group, groupIndex) => (
 						<NavigationGroup
@@ -402,13 +484,13 @@ export function Navigation({
 				</div>
 			</div>
 
-			{/* Robot container */}
+			{/* Robot container with consistent positioning */}
 			<div className="relative h-[288px] overflow-hidden -mt-1">
 				<div 
 					className={`absolute w-full transition-opacity duration-500 ease-in-out ${
-						isAnyDropdownOpen 
-							? 'opacity-0' 
-							: 'opacity-100'
+						robotVisible 
+							? 'opacity-100' 
+							: 'opacity-0'
 					}`}
 				>
 					<ImageRobot />
@@ -417,3 +499,4 @@ export function Navigation({
 		</div>
 	)
 }
+
