@@ -120,17 +120,17 @@ export const HomePage: FC = () => (
 	>
 		<div className="flex flex-col mt-10 gap-4">
 			<div>
-				<div className="w-full px-8 text-inverse bg-accent py-2 text-center">
+				<div className="w-full px-4 md:px-8 text-inverse bg-accent py-2 text-center">
 					Wallets listed on this page are not official endoresements, and are provided for
 					informational purposes only.
 				</div>
-				<div className="bg-gradient-to-r from-[var(--banner-gradient-from)] to-[var(--banner-gradient-to)] px-8 py-6 flex justify-between items-center flex-wrap">
-					<div className="flex flex-col gap-2 py-8">
+				<div className="bg-gradient-to-r from-[var(--banner-gradient-from)] to-[var(--banner-gradient-to)] px-4 md:px-8 py-6 flex justify-between items-center flex-wrap">
+					<div className="flex flex-col gap-2 py-4 md:py-8 w-full md:w-auto">
 						<div className="text-sm text-secondary">
 							HOME / WALLETS / <span>FIND WALLET</span>
 						</div>
-						<h1 className="text-3xl font-bold">Who watches the wallets?</h1>
-						<p>
+						<h1 className="text-2xl md:text-3xl font-bold">Who watches the wallets?</h1>
+						<p className="text-sm md:text-base">
 							Alpha version; work in progress. For content contributions, please see{' '}
 							<a
 								href="https://github.com/fluidkey/walletbeat"
@@ -143,34 +143,9 @@ export const HomePage: FC = () => (
 							.
 						</p>
 					</div>
-					<div className="flex items-center">
-						<img src="/banner.png" className="h-[195px] w-auto" />
+					<div className="flex items-center justify-center w-full md:w-auto mt-4 md:mt-0">
+						<img src="/banner.png" className="h-[150px] md:h-[195px] w-auto" />
 					</div>
-				</div>
-			</div>
-
-			<div className="w-full flex flex-col gap-2">
-				<div className="flex gap-4 w-full flex-wrap xl:flex-nowrap flex-col xl:flex-row">
-					{[
-						{
-							title: '🤷‍♀️ New to Crypto',
-							description: 'First time user looking for beginner wallet.',
-							id: 'beginner',
-						},
-						{
-							title: '📊 Finance',
-							description: 'Looking for a wallet for your crypto portfolio.',
-						},
-						{
-							title: '🛠️ Developer',
-							description: 'Looking for a wallet for your crypto portfolio.',
-						},
-					].map(item => (
-						<div key={item.id} className="flex flex-col gap-2 card flex-1">
-							<h3 className="font-bold text-accent">{item.title}</h3>
-							<div className="text-secondary">{item.description}</div>
-						</div>
-					))}
 				</div>
 			</div>
 

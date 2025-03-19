@@ -344,6 +344,7 @@ export function Navigation({
 	const [isAnyDropdownOpen, setIsAnyDropdownOpen] = useState(false)
 	const [robotVisible, setRobotVisible] = useState(true)
 	const [iconOpacity, setIconOpacity] = useState(0)
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 	const navigationRef = useRef<HTMLDivElement>(null)
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const iconTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -426,6 +427,11 @@ export function Navigation({
 		}
 	}
 
+	// Toggle mobile menu
+	const toggleMobileMenu = () => {
+		setMobileMenuOpen(!mobileMenuOpen)
+	}
+
 	// Add the scrollbar hiding styles
 	useEffect(() => {
 		// Add the styles to the document head
@@ -493,14 +499,51 @@ export function Navigation({
 					</span>
 					<span className="ml-[-10px]">WalletBeat</span>
 				</a>
+
+				{/* Mobile menu toggle button - only visible on small screens */}
+				<button
+					className="md:hidden flex items-center p-2 focus:outline-none"
+					onClick={toggleMobileMenu}
+					aria-label="Toggle mobile menu"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-6 w-6 text-text"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d={mobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
+						/>
+					</svg>
+				</button>
+
+				{/* Desktop theme switcher - only visible on larger screens */}
+				<div className="hidden md:block">
+					<ThemeSwitcher />
+				</div>
+			</div>
+
+			{/* Mobile theme switcher - only visible when mobile menu is open */}
+			<div className={`md:hidden px-6 mb-3 ${mobileMenuOpen ? 'block' : 'hidden'}`}>
 				<ThemeSwitcher />
 			</div>
 
-			{/* Desktop Search Component - ensures the search is always visible on desktop */}
-			{prefix && <div className="px-6 mb-4 w-full">{prefix}</div>}
+			{/* Search component - visible on desktop and when mobile menu is open */}
+			{prefix && (
+				<div className={`px-6 mb-4 w-full ${mobileMenuOpen ? 'block' : 'hidden md:block'}`}>
+					{prefix}
+				</div>
+			)}
 
-			{/* Scrollable navigation area with flex-grow and auto-height when dropdowns are open */}
-			<div className="flex-grow overflow-y-auto scrollbar-hide">
+			{/* Scrollable navigation area - visible on desktop and when mobile menu is open */}
+			<div
+				className={`flex-grow overflow-y-auto scrollbar-hide ${mobileMenuOpen ? 'block' : 'hidden md:block'}`}
+			>
 				<div className="flex flex-col gap-0 px-0 -ml-1">
 					{nonEmptyMap(groups, (group, groupIndex) => (
 						<NavigationGroup
@@ -514,9 +557,9 @@ export function Navigation({
 				</div>
 			</div>
 
-			{/* Robot container with consistent positioning - shrinks when dropdowns are open */}
+			{/* Robot container - visible on desktop and when mobile menu is open */}
 			<div
-				className={`relative ${isAnyDropdownOpen ? 'h-[100px]' : 'h-[288px]'} overflow-hidden -mt-1 transition-all duration-300`}
+				className={`relative ${isAnyDropdownOpen ? 'h-[100px]' : 'h-[288px]'} overflow-hidden -mt-1 transition-all duration-300 ${mobileMenuOpen ? 'block' : 'hidden md:block'}`}
 			>
 				<div
 					className={`absolute w-full ${

@@ -160,3 +160,48 @@ code {
 	/* Why monospace twice? See https://github.com/necolas/normalize.css/issues/519#issuecomment-197131966 */
 	font-family: monospace, monospace;
 }
+
+/* Mobile responsive utilities */
+@media (max-width: 768px) {
+  /* Adjust font sizes for better readability on mobile */
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+  
+  /* Increase touch targets for better mobile usability */
+  button, 
+  a, 
+  [role="button"] {
+    min-height: 40px;
+    min-width: 40px;
+  }
+  
+  /* Add more breathing room to content on small screens */
+  .content-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Responsive table styles */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbars (already partially implemented in Navigation.tsx) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
