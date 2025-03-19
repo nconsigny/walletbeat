@@ -19,6 +19,10 @@ export const daimoInc: CorporateEntity & WalletDeveloper = {
 	},
 	jurisdiction: 'United States',
 	url: 'https://daimo.com/',
+	repoUrl: 'https://github.com/daimo-eth',
 	privacyPolicy: 'https://daimo.com/privacy',
 	crunchbase: 'https://www.crunchbase.com/organization/daimo',
+	linkedin: { type: 'NO_LINKEDIN_URL' },
+	twitter: 'https://x.com/daimo_eth',
+	farcaster: 'https://warpcast.com/daimo',
 }

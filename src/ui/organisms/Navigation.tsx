@@ -5,6 +5,17 @@ import React, { memo, useState, useRef, useEffect } from 'react'
 import { ThemeSwitcher } from './ThemeSwitcher'
 import { ImageRobot } from './imageRobot'
 
+// Add global CSS classes for hiding scrollbars
+const globalStyles = `
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+.scrollbar-hide {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+`
+
 /**
  * Size of the navigation menu, in pixels.
  */
@@ -102,14 +113,14 @@ function SingleListItemIcon({ children }: { children: React.ReactNode }): React.
 	return (
 		<span
 			key="listItemIcon"
-		// sx={{
-		// 	minWidth: `${navigationListIconSize}px`,
-		// 	width: `${navigationListIconSize}px`,
-		// 	height: `${navigationListIconSize}px`,
-		// 	display: 'inline-block',
-		// textAlign: 'center',
-		// marginRight: '4px',
-		// }}
+			// sx={{
+			// 	minWidth: `${navigationListIconSize}px`,
+			// 	width: `${navigationListIconSize}px`,
+			// 	height: `${navigationListIconSize}px`,
+			// 	display: 'inline-block',
+			// textAlign: 'center',
+			// marginRight: '4px',
+			// }}
 		>
 			{children}
 		</span>
@@ -129,16 +140,17 @@ interface NavigationItemProps {
  */
 const NavigationItem = memo(
 	function NavigationItem({ item, active, depth }: NavigationItemProps): React.JSX.Element {
-		const [isOpen, setIsOpen] = useState(false);
-		const linkStyles = "whitespace-nowrap flex flex-row items-center gap-1.5 py-0.5 hover:bg-backgroundSecondary rounded-md px-3";
-		const hasChildren = (item.children?.length ?? 0) > 0;
+		const [isOpen, setIsOpen] = useState(false)
+		const linkStyles =
+			'flex flex-row items-left gap-1 py-0.15 hover:bg-backgroundSecondary rounded-md px-0.5 pl-0'
+		const hasChildren = (item.children?.length ?? 0) > 0
 
 		const toggleDropdown = (e: React.MouseEvent) => {
 			if (hasChildren) {
-				e.preventDefault();
-				setIsOpen(!isOpen);
+				e.preventDefault()
+				setIsOpen(!isOpen)
 			}
-		};
+		}
 
 		const ButtonComponent = ({
 			children,
@@ -148,22 +160,22 @@ const NavigationItem = memo(
 			if (isNavigationContentItem(item)) {
 				return (
 					<a
-						href={hasChildren ? "#" : `#${item.contentId}`}
+						href={hasChildren ? '#' : `#${item.contentId}`}
 						className={linkStyles}
 						onClick={toggleDropdown}
 					>
 						{children}
 						{hasChildren && (
 							<span className="ml-auto">
-								<svg 
-									stroke="currentColor" 
-									fill="none" 
-									strokeWidth="2" 
-									viewBox="0 0 24 24" 
-									strokeLinecap="round" 
-									strokeLinejoin="round" 
-									height="1em" 
-									width="1em" 
+								<svg
+									stroke="currentColor"
+									fill="none"
+									strokeWidth="2"
+									viewBox="0 0 24 24"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									height="1em"
+									width="1em"
 									xmlns="http://www.w3.org/2000/svg"
 									className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
 								>
@@ -177,8 +189,8 @@ const NavigationItem = memo(
 			if (isNavigationLinkItem(item)) {
 				return (
 					<a
-						href={hasChildren ? "#" : item.href}
-						target={!hasChildren && item.href.startsWith('https://') ? '_blank' : undefined} 
+						href={hasChildren ? '#' : item.href}
+						target={!hasChildren && item.href.startsWith('https://') ? '_blank' : undefined}
 						rel="noreferrer"
 						className={linkStyles}
 						onClick={toggleDropdown}
@@ -186,15 +198,15 @@ const NavigationItem = memo(
 						{children}
 						{hasChildren && (
 							<span className="ml-auto">
-								<svg 
-									stroke="currentColor" 
-									fill="none" 
-									strokeWidth="2" 
-									viewBox="0 0 24 24" 
-									strokeLinecap="round" 
-									strokeLinejoin="round" 
-									height="1em" 
-									width="1em" 
+								<svg
+									stroke="currentColor"
+									fill="none"
+									strokeWidth="2"
+									viewBox="0 0 24 24"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									height="1em"
+									width="1em"
 									xmlns="http://www.w3.org/2000/svg"
 									className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
 								>
@@ -208,19 +220,15 @@ const NavigationItem = memo(
 			throw new Error('Invalid navigation item')
 		}
 		return (
-			<li
-				key={`listItem-${item.id}`}
-				id={`listItem-${item.id}`}
-			>
+			<li key={`listItem-${item.id}`} id={`listItem-${item.id}`}>
 				<ButtonComponent key="buttonComponent">
 					{item.icon && <SingleListItemIcon key="icon">{item.icon}</SingleListItemIcon>}
-					<span>
-						{item.title}
-					</span>
+					<span>{item.title}</span>
 				</ButtonComponent>
-				
+
 				{hasChildren && (
-					<ul key={`subitems-${item.id}`} 
+					<ul
+						key={`subitems-${item.id}`}
 						className={`pl-1 border-l ml-2 flex flex-col gap-0 overflow-hidden transition-all ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
 					>
 						{item.children?.map(subitem => (
@@ -268,9 +276,7 @@ export const NavigationGroup = memo(
 	}: NavigationGroupProps): React.JSX.Element {
 		return (
 			<>
-				<ul
-				 className="flex flex-col gap-0"
-				>
+				<ul className="flex flex-col gap-0">
 					{nonEmptyMap(group.items, item => (
 						<React.Fragment key={`fragment-${item.id}`}>
 							<NavigationItem
@@ -335,29 +341,137 @@ export function Navigation({
 	onContentItemClick?: (item: NavigationContentItem) => void
 	prefix?: React.ReactNode
 }): React.JSX.Element {
-	const [isAnyDropdownOpen, setIsAnyDropdownOpen] = useState(false);
-	const navigationRef = useRef<HTMLDivElement>(null);
+	const [isAnyDropdownOpen, setIsAnyDropdownOpen] = useState(false)
+	const [robotVisible, setRobotVisible] = useState(true)
+	const [iconOpacity, setIconOpacity] = useState(0)
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+	const navigationRef = useRef<HTMLDivElement>(null)
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+	const iconTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+	const animationRef = useRef<number | null>(null)
+	const wasDropdownOpenRef = useRef(false)
+
+	// Function to animate opacity change smoothly
+	const animateOpacity = (start: number, end: number, duration: number) => {
+		let startTime: number | null = null
+
+		// Cancel any ongoing animation
+		if (animationRef.current !== null) {
+			cancelAnimationFrame(animationRef.current)
+		}
+
+		// Animation function
+		const animate = (timestamp: number) => {
+			if (!startTime) {
+				startTime = timestamp
+			}
+			const elapsedTime = timestamp - startTime
+			const progress = Math.min(elapsedTime / duration, 1)
+			const currentOpacity = start + (end - start) * progress
+
+			setIconOpacity(currentOpacity)
+
+			if (progress < 1) {
+				animationRef.current = requestAnimationFrame(animate)
+			}
+		}
+
+		// Start animation
+		animationRef.current = requestAnimationFrame(animate)
+	}
 
 	// Function to check if any dropdown is open by looking for elements with max-h-96
 	const checkDropdowns = () => {
 		if (navigationRef.current) {
-			const openDropdowns = navigationRef.current.querySelectorAll('ul[class*="max-h-96"]');
-			setIsAnyDropdownOpen(openDropdowns.length > 0);
+			const openDropdowns = navigationRef.current.querySelectorAll('ul[class*="max-h-96"]')
+			const isOpen = openDropdowns.length > 0
+
+			// Only trigger state changes if we're transitioning between states
+			const isTransitioning = wasDropdownOpenRef.current !== isOpen
+
+			// Set container size immediately
+			setIsAnyDropdownOpen(isOpen)
+
+			// Only trigger animations if we're transitioning between states
+			if (isTransitioning) {
+				// Clear any existing timeouts to prevent multiple animations
+				if (timeoutRef.current) {
+					clearTimeout(timeoutRef.current)
+				}
+				if (iconTimeoutRef.current) {
+					clearTimeout(iconTimeoutRef.current)
+				}
+
+				// Create smooth transition for robot and icon
+				if (isOpen) {
+					// Show icon with smooth animation after a delay
+					iconTimeoutRef.current = setTimeout(() => {
+						animateOpacity(0, 1, 1500) // Fade in over 1.5 seconds
+					}, 500)
+
+					// Make robot disappear instantly
+					setRobotVisible(false)
+				} else {
+					// Hide icon with smooth animation
+					animateOpacity(iconOpacity, 0, 800) // Fade out over 0.8 seconds
+
+					// Delay showing the robot to prevent flickering
+					timeoutRef.current = setTimeout(() => {
+						setRobotVisible(true)
+					}, 300)
+				}
+			}
+
+			// Update our ref to the current state for next time
+			wasDropdownOpenRef.current = isOpen
 		}
-	};
+	}
+
+	// Toggle mobile menu
+	const toggleMobileMenu = () => {
+		setMobileMenuOpen(!mobileMenuOpen)
+	}
+
+	// Add the scrollbar hiding styles
+	useEffect(() => {
+		// Add the styles to the document head
+		const styleElement = document.createElement('style')
+		styleElement.innerHTML = globalStyles
+		document.head.appendChild(styleElement)
+
+		// Clean up function to remove the styles when the component unmounts
+		return () => {
+			document.head.removeChild(styleElement)
+		}
+	}, [])
+
+	// Clean up timeouts and animations on unmount
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current)
+			}
+			if (iconTimeoutRef.current) {
+				clearTimeout(iconTimeoutRef.current)
+			}
+			if (animationRef.current !== null) {
+				cancelAnimationFrame(animationRef.current)
+			}
+		}
+	}, [])
 
 	// Set up mutation observer to watch for changes in the navigation
 	useEffect(() => {
-		const observer = new MutationObserver(checkDropdowns);
+		const observer = new MutationObserver(checkDropdowns)
 		if (navigationRef.current) {
 			observer.observe(navigationRef.current, {
 				attributes: true,
 				subtree: true,
-				attributeFilter: ['class']
-			});
+				attributeFilter: ['class'],
+			})
 		}
-		return () => observer.disconnect();
-	}, []);
+		return () => observer.disconnect()
+	}, [])
 
 	return (
 		<div
@@ -366,22 +480,71 @@ export function Navigation({
 			className="flex flex-col w-full md:max-w-[300px] flex-0 py-6 sticky top-0 h-screen relative"
 		>
 			<div className="flex justify-between items-center w-full gap-1 px-6 mb-3">
-				<a href="/" className="text-xl text-accent font-bold italic whitespace-nowrap">
-					~ WalletBeat
+				<a
+					href="/"
+					className="text-xl text-accent font-bold italic whitespace-nowrap flex items-center gap-1 relative"
+				>
+					<span
+						className={`transition-opacity duration-800 ease-in-out ${isAnyDropdownOpen ? 'opacity-0' : 'opacity-100'} absolute left-5`}
+					>
+						~
+					</span>
+					<span className="relative w-16 h-13 inline-block">
+						<img
+							src="/images/icon.png"
+							alt="WalletBeat Icon"
+							className="h-14 w-12 absolute left+10 -top-[35px]"
+							style={{ opacity: iconOpacity }}
+						/>
+					</span>
+					<span className="ml-[-10px]">WalletBeat</span>
 				</a>
+
+				{/* Mobile menu toggle button - only visible on small screens */}
+				<button
+					className="md:hidden flex items-center p-2 focus:outline-none"
+					onClick={toggleMobileMenu}
+					aria-label="Toggle mobile menu"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-6 w-6 text-text"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d={mobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
+						/>
+					</svg>
+				</button>
+
+				{/* Desktop theme switcher - only visible on larger screens */}
+				<div className="hidden md:block">
+					<ThemeSwitcher />
+				</div>
+			</div>
+
+			{/* Mobile theme switcher - only visible when mobile menu is open */}
+			<div className={`md:hidden px-6 mb-3 ${mobileMenuOpen ? 'block' : 'hidden'}`}>
 				<ThemeSwitcher />
 			</div>
-			
-			{/* Desktop Search Component - ensures the search is always visible on desktop */}
+
+			{/* Search component - visible on desktop and when mobile menu is open */}
 			{prefix && (
-				<div className="px-6 mb-4 w-full">
+				<div className={`px-6 mb-4 w-full ${mobileMenuOpen ? 'block' : 'hidden md:block'}`}>
 					{prefix}
 				</div>
 			)}
-			
-			{/* Scrollable navigation area with flex-grow */}
-			<div className="flex-grow overflow-y-auto">
-				<div className="flex flex-col gap-2 px-3">
+
+			{/* Scrollable navigation area - visible on desktop and when mobile menu is open */}
+			<div
+				className={`flex-grow overflow-y-auto scrollbar-hide ${mobileMenuOpen ? 'block' : 'hidden md:block'}`}
+			>
+				<div className="flex flex-col gap-0 px-0 -ml-1">
 					{nonEmptyMap(groups, (group, groupIndex) => (
 						<NavigationGroup
 							key={`navigationGroup-${group.id}`}
@@ -394,13 +557,13 @@ export function Navigation({
 				</div>
 			</div>
 
-			{/* Robot container */}
-			<div className="relative h-[288px] overflow-hidden -mt-1">
-				<div 
-					className={`absolute w-full transition-transform duration-500 ease-in-out ${
-						isAnyDropdownOpen 
-							? 'translate-y-[300%]' 
-							: 'translate-y-0'
+			{/* Robot container - visible on desktop and when mobile menu is open */}
+			<div
+				className={`relative ${isAnyDropdownOpen ? 'h-[100px]' : 'h-[288px]'} overflow-hidden -mt-1 transition-all duration-300 ${mobileMenuOpen ? 'block' : 'hidden md:block'}`}
+			>
+				<div
+					className={`absolute w-full ${
+						robotVisible ? 'transition-opacity duration-1000 ease-in-out opacity-100' : 'opacity-0'
 					}`}
 				>
 					<ImageRobot />

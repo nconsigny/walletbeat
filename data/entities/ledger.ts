@@ -24,4 +24,5 @@ export const ledger: CorporateEntity & WalletDeveloper = {
 	crunchbase: 'https://www.crunchbase.com/organization/ledger-2',
 	linkedin: 'https://www.linkedin.com/company/ledgerhq/',
 	twitter: 'https://x.com/Ledger',
-} 
+	farcaster: 'https://warpcast.com/ledgerofficial',
+}

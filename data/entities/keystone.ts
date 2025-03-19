@@ -19,8 +19,10 @@ export const keystone: CorporateEntity & WalletDeveloper = {
 	},
 	jurisdiction: 'Hong Kong',
 	url: 'https://keyst.one/',
+	repoUrl: 'https://github.com/KeystoneHQ',
 	privacyPolicy: 'https://keyst.one/privacy-policy',
 	linkedin: 'https://www.linkedin.com/company/keystonehardwarewallet/',
 	twitter: 'https://x.com/KeystoneWallet',
 	crunchbase: 'https://www.crunchbase.com/organization/kesytone',
-} 
+	farcaster: 'https://warpcast.com/keystonewallet',
+}

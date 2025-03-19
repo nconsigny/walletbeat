@@ -19,6 +19,10 @@ export const veridise: CorporateEntity & SecurityAuditor = {
 	},
 	jurisdiction: 'Austin, Texas, United States',
 	url: 'https://veridise.com/',
+	repoUrl: 'https://github.com/Veridise',
 	privacyPolicy: 'https://veridise.com/privacy-policy/',
 	crunchbase: 'https://www.crunchbase.com/organization/veridise',
+	linkedin: 'https://www.linkedin.com/company/veridise',
+	twitter: 'https://x.com/VeridiseInc',
+	farcaster: { type: 'NO_FARCASTER_PROFILE' },
 }

@@ -1,7 +1,7 @@
 ---
 // Global CSS
-import '../global.css';
-import '@fontsource/work-sans';
+import '../global.css'
+import '@fontsource/work-sans'
 
 // Props
 import type { ComponentProps } from 'astro/types';
@@ -13,37 +13,37 @@ type Props = {
 const { metadata } = Astro.props;
 
 // Components
-import Metadata from '@/components/Metadata.astro';
-import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
+import Metadata from '@/components/Metadata.astro'
+import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry'
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 		<Metadata {metadata} />
 		<!-- Theme initialization script -->
 		<script is:inline>
 			// Initialize theme from localStorage or system preference
 			function initializeTheme() {
 				// Check localStorage first
-				const storedTheme = localStorage.getItem('theme');
+				const storedTheme = localStorage.getItem('theme')
 
 				if (storedTheme) {
 					// Use stored preference
-					document.documentElement.classList.toggle('dark', storedTheme === 'dark');
+					document.documentElement.classList.toggle('dark', storedTheme === 'dark')
 				} else {
 					// Check system preference
-					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-					document.documentElement.classList.toggle('dark', prefersDark);
+					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+					document.documentElement.classList.toggle('dark', prefersDark)
 					// Store the initial preference
-					localStorage.setItem('theme', prefersDark ? 'dark' : 'light');
+					localStorage.setItem('theme', prefersDark ? 'dark' : 'light')
 				}
 			}
 
 			// Run immediately
-			initializeTheme();
+			initializeTheme()
 		</script>
 	</head>
 	<body>

@@ -21,6 +21,10 @@ export const slowMist: CorporateEntity & SecurityAuditor = {
 	},
 	jurisdiction: 'China',
 	url: 'https://www.slowmist.com/',
+	repoUrl: 'https://github.com/slowmist',
 	privacyPolicy: { type: 'NO_PRIVACY_POLICY' },
 	crunchbase: 'https://www.crunchbase.com/organization/slowmist',
+	linkedin: 'https://www.linkedin.com/company/slowmist',
+	twitter: 'https://x.com/SlowMist_Team',
+	farcaster: { type: 'NO_FARCASTER_PROFILE' },
 }

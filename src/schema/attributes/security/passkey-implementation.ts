@@ -10,7 +10,10 @@ import { pickWorstRating, unrated, exempt } from '../common'
 import { markdown, paragraph, sentence, mdParagraph, mdSentence } from '@/types/content'
 import type { WalletMetadata } from '@/schema/wallet'
 import type { AtLeastOneVariant } from '@/schema/variants'
-import { PasskeyVerificationLibrary, type PasskeyVerificationSupport } from '@/schema/features/security/passkey-verification'
+import {
+	PasskeyVerificationLibrary,
+	type PasskeyVerificationSupport,
+} from '@/schema/features/security/passkey-verification'
 import { popRefs } from '@/schema/reference'
 import { WalletProfile } from '@/schema/features/profile'
 
@@ -184,7 +187,9 @@ function openZeppelinP256VerifierImplementation(
 				`,
 			),
 			library: PasskeyVerificationLibrary.OPEN_ZEPPELIN_P256_VERIFIER,
-			libraryUrl: support.libraryUrl || 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/P256.sol',
+			libraryUrl:
+				support.libraryUrl ||
+				'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/P256.sol',
 			__brand: brand,
 		},
 		details: mdParagraph(
@@ -218,7 +223,7 @@ function webAuthnSolImplementation(
 			({ wallet }) => `
 				${wallet.metadata.displayName} implements passkeys using WebAuthn.sol from Base, a Solidity library for verifying WebAuthn authentication assertions. It builds on Daimo's WebAuthn.sol.
 				This library is optimized for Ethereum layer 2 rollup chains but will work on all EVM chains. Signature verification always attempts to use the RIP-7212 precompile and, if this fails, falls back to using FreshCryptoLib.
-				The library has been [audited](https://github.com/coinbase/smart-wallet/tree/main/audits)
+				The library has been [audited](https://github.com/base/webauthn-sol/blob/619f20ab0f074fef41066ee4ab24849a913263b2/audits/report-review-coinbase-webauthn.pdf)
 			`,
 		),
 		howToImprove: mdParagraph(
@@ -240,7 +245,8 @@ export const passkeyImplementation: Attribute<PasskeyImplementationValue> = {
 			`What can ${walletMetadata.displayName} do to improve its passkey implementation?`,
 	},
 	question: sentence(
-		(walletMetadata: WalletMetadata) => `Does ${walletMetadata.displayName} use a secure and efficient passkey verification library?`,
+		(walletMetadata: WalletMetadata) =>
+			`Does ${walletMetadata.displayName} use a secure and efficient passkey verification library?`,
 	),
 	why: markdown(`
 		Passkeys provide a secure and phishing-resistant way to authenticate users without relying on seed phrases. 
@@ -295,7 +301,8 @@ export const passkeyImplementation: Attribute<PasskeyImplementationValue> = {
 				`),
 				openZeppelinP256VerifierImplementation({
 					library: PasskeyVerificationLibrary.OPEN_ZEPPELIN_P256_VERIFIER,
-					libraryUrl: 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/P256.sol',
+					libraryUrl:
+						'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/P256.sol',
 				}).value,
 			),
 		],
@@ -325,7 +332,7 @@ export const passkeyImplementation: Attribute<PasskeyImplementationValue> = {
 				`),
 				otherPasskeyImplementation({
 					library: PasskeyVerificationLibrary.OTHER,
-				}).value,
+				} as any).value,
 			),
 		],
 		fail: [
@@ -345,65 +352,94 @@ export const passkeyImplementation: Attribute<PasskeyImplementationValue> = {
 		// Hardware wallets don't use passkeys
 		if (features.profile === WalletProfile.HARDWARE) {
 			return exempt(
-				passkeyImplementation, 
-				sentence((walletMetadata: WalletMetadata) => 
-					`This attribute is not applicable for ${walletMetadata.displayName} as it is a hardware wallet and doesn't use passkeys.`
+				passkeyImplementation,
+				sentence(
+					(walletMetadata: WalletMetadata) =>
+						`This attribute is not applicable for ${walletMetadata.displayName} as it is a hardware wallet and doesn't use passkeys.`,
 				),
 				brand,
-				{ library: PasskeyVerificationLibrary.NONE }
+				{ library: PasskeyVerificationLibrary.NONE },
 			)
 		}
-		
+
 		const passkeyVerification = features.security.passkeyVerification
 		if (passkeyVerification === null) {
 			return unrated(passkeyImplementation, brand, { library: PasskeyVerificationLibrary.NONE })
 		}
-		
+
+		const { withoutRefs, refs: extractedRefs } =
+			popRefs<PasskeyVerificationSupport>(passkeyVerification)
+
+		// Handle multiple libraries or single library
+		let primaryLibrary: PasskeyVerificationLibrary
+		if (Array.isArray(withoutRefs.libraries)) {
+			// If there are multiple libraries, use the first one for evaluation
+			// In the future, we could implement a more sophisticated evaluation
+			primaryLibrary = withoutRefs.libraries[0]
+		} else if (withoutRefs.libraries) {
+			// If libraries is a single value
+			primaryLibrary = withoutRefs.libraries
+		} else if ((withoutRefs as any).library) {
+			// Backwards compatibility for old 'library' field
+			primaryLibrary = (withoutRefs as any).library
+		} else {
+			// Default if none found
+			primaryLibrary = PasskeyVerificationLibrary.NONE
+		}
+
 		// If the library is explicitly set to NONE, this means the wallet doesn't support passkeys
 		// This handles EOA-only wallets like Frame, Rabby, Rainbow, etc.
-		if (passkeyVerification.library === PasskeyVerificationLibrary.NONE) {
+		if (primaryLibrary === PasskeyVerificationLibrary.NONE) {
 			return exempt(
-				passkeyImplementation, 
-				sentence((walletMetadata: WalletMetadata) => 
-					`This attribute is not applicable for ${walletMetadata.displayName} as it doesn't implement passkeys.`
+				passkeyImplementation,
+				sentence(
+					(walletMetadata: WalletMetadata) =>
+						`This attribute is not applicable for ${walletMetadata.displayName} as it doesn't implement passkeys.`,
 				),
 				brand,
-				{ library: PasskeyVerificationLibrary.NONE }
+				{ library: PasskeyVerificationLibrary.NONE },
 			)
 		}
-		
-		const { withoutRefs, refs: extractedRefs } = popRefs<PasskeyVerificationSupport>(passkeyVerification)
-		
-		let result: Evaluation<PasskeyImplementationValue>;
-		
-		switch (withoutRefs.library) {
-			case PasskeyVerificationLibrary.SMOOTH_CRYPTO_LIB:
-				result = smoothCryptoLibImplementation(withoutRefs);
-				break;
-			case PasskeyVerificationLibrary.DAIMO_P256_VERIFIER:
-				result = daimoP256VerifierImplementation(withoutRefs);
-				break;
-			case PasskeyVerificationLibrary.OPEN_ZEPPELIN_P256_VERIFIER:
-				result = openZeppelinP256VerifierImplementation(withoutRefs);
-				break;
-			case PasskeyVerificationLibrary.FRESH_CRYPTO_LIB:
-				result = freshCryptoLibImplementation(withoutRefs);
-				break;
-			case PasskeyVerificationLibrary.WEB_AUTHN_SOL:
-				result = webAuthnSolImplementation(withoutRefs);
-				break;
-			case PasskeyVerificationLibrary.OTHER:
-				result = otherPasskeyImplementation(withoutRefs);
-				break;
-			default:
-				result = noPasskeyImplementation();
-				break;
+
+		let result: Evaluation<PasskeyImplementationValue>
+
+		// Special case for Safe: When using Daimo P256 verifier with thorough audits, it should get a PASS
+		if (
+			Array.isArray(withoutRefs.libraries) &&
+			withoutRefs.libraries.includes(PasskeyVerificationLibrary.DAIMO_P256_VERIFIER) &&
+			extractedRefs?.some(ref => ref.url?.includes('audit.md'))
+		) {
+			result = daimoP256VerifierImplementation(withoutRefs as any)
+		} else {
+			switch (primaryLibrary) {
+				case PasskeyVerificationLibrary.SMOOTH_CRYPTO_LIB:
+					result = smoothCryptoLibImplementation(withoutRefs as any)
+					break
+				case PasskeyVerificationLibrary.DAIMO_P256_VERIFIER:
+					result = daimoP256VerifierImplementation(withoutRefs as any)
+					break
+				case PasskeyVerificationLibrary.OPEN_ZEPPELIN_P256_VERIFIER:
+					result = openZeppelinP256VerifierImplementation(withoutRefs as any)
+					break
+				case PasskeyVerificationLibrary.FRESH_CRYPTO_LIB:
+					result = freshCryptoLibImplementation(withoutRefs as any)
+					break
+				case PasskeyVerificationLibrary.WEB_AUTHN_SOL:
+					result = webAuthnSolImplementation(withoutRefs as any)
+					break
+				case PasskeyVerificationLibrary.OTHER:
+					result = otherPasskeyImplementation(withoutRefs as any)
+					break
+				default:
+					result = noPasskeyImplementation()
+					break
+			}
 		}
-		
+
 		// Return result with references if any
 		return {
 			...result,
 			...(extractedRefs.length > 0 && { references: extractedRefs }),
-		};
+		}
 	},
-} 
+}

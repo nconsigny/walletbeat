@@ -25,8 +25,12 @@ export const exampleNodeCompany: CorporateEntity &
 	icon: 'NO_ICON',
 	jurisdiction: 'Atlantis',
 	url: 'https://example.com/',
+	repoUrl: 'https://github.com/example-node-company',
 	privacyPolicy: 'https://example.com/privacy',
 	crunchbase: { type: 'NO_CRUNCHBASE_URL' },
+	linkedin: { type: 'NO_LINKEDIN_URL' },
+	twitter: { type: 'NO_TWITTER_URL' },
+	farcaster: { type: 'NO_FARCASTER_PROFILE' },
 }
 
 export const exampleSecurityAuditor: CorporateEntity & SecurityAuditor = {
@@ -46,8 +50,12 @@ export const exampleSecurityAuditor: CorporateEntity & SecurityAuditor = {
 	icon: 'NO_ICON',
 	jurisdiction: 'Atlantis',
 	url: 'https://example.com/',
+	repoUrl: 'https://github.com/example-security-auditor',
 	privacyPolicy: 'https://example.com/privacy',
 	crunchbase: { type: 'NO_CRUNCHBASE_URL' },
+	linkedin: { type: 'NO_LINKEDIN_URL' },
+	twitter: { type: 'NO_TWITTER_URL' },
+	farcaster: { type: 'NO_FARCASTER_PROFILE' },
 }
 
 export const exampleCex: CorporateEntity & Exchange = {
@@ -67,6 +75,10 @@ export const exampleCex: CorporateEntity & Exchange = {
 	icon: 'NO_ICON',
 	jurisdiction: 'Atlantis',
 	url: 'https://example.com/',
+	repoUrl: 'https://github.com/example-centralized-exchange',
 	privacyPolicy: 'https://example.com/privacy',
 	crunchbase: { type: 'NO_CRUNCHBASE_URL' },
+	linkedin: { type: 'NO_LINKEDIN_URL' },
+	twitter: { type: 'NO_TWITTER_URL' },
+	farcaster: { type: 'NO_FARCASTER_PROFILE' },
 }

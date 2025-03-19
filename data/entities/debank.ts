@@ -27,6 +27,10 @@ export const deBank: ChainDataProvider &
 	},
 	jurisdiction: 'Singapore',
 	url: 'https://debank.com/',
+	repoUrl: 'https://github.com/DeBankDeFi',
 	privacyPolicy: 'https://rabby.io/docs/privacy/',
 	crunchbase: 'https://www.crunchbase.com/organization/debank',
+	linkedin: { type: 'NO_LINKEDIN_URL' },
+	twitter: 'https://x.com/DebankDeFi',
+	farcaster: 'https://warpcast.com/debankdefi',
 }

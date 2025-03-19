@@ -21,6 +21,10 @@ export const certora: CorporateEntity & SecurityAuditor = {
 	},
 	jurisdiction: 'Israel',
 	url: 'https://www.certora.com/',
-	privacyPolicy: null,
+	repoUrl: 'https://github.com/Certora',
+	privacyPolicy: 'https://www.certora.com/privacy',
 	crunchbase: 'https://www.crunchbase.com/organization/certora',
-} 
+	linkedin: { type: 'NO_LINKEDIN_URL' },
+	twitter: 'https://x.com/CertoraInc',
+	farcaster: 'https://warpcast.com/certora',
+}

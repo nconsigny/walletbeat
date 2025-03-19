@@ -19,6 +19,10 @@ export const honeycomb: CorporateEntity & DataBroker = {
 	},
 	jurisdiction: 'San Francisco, California, United States',
 	url: 'https://www.honeycomb.io/',
+	repoUrl: 'https://github.com/honeycombio',
 	privacyPolicy: 'https://www.honeycomb.io/privacy',
 	crunchbase: 'https://www.crunchbase.com/organization/honeycombio',
+	linkedin: 'https://www.linkedin.com/company/honeycomb.io',
+	twitter: 'https://x.com/honeycombio',
+	farcaster: { type: 'NO_FARCASTER_PROFILE' },
 }

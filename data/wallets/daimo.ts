@@ -20,6 +20,7 @@ import { PasskeyVerificationLibrary } from '@/schema/features/security/passkey-v
 import { nconsigny } from '../contributors/nconsigny'
 import { WalletTypeCategory, SmartWalletStandard } from '@/schema/features/wallet-type'
 import { Variant } from '@/schema/variants'
+import { FeeTransparencyLevel } from '@/schema/features/transparency/fee-transparency'
 
 export const daimo: Wallet = {
 	metadata: {
@@ -42,8 +43,8 @@ export const daimo: Wallet = {
 		lastUpdated: '2025-03-12',
 		multiWalletType: {
 			categories: [WalletTypeCategory.SMART_WALLET],
-			smartWalletStandards: [SmartWalletStandard.ERC_4337]
-		}
+			smartWalletStandards: [SmartWalletStandard.ERC_4337],
+		},
 	},
 	features: {
 		profile: WalletProfile.MOBILE,
@@ -94,13 +95,15 @@ export const daimo: Wallet = {
 			passkeyVerification: {
 				library: PasskeyVerificationLibrary.DAIMO_P256_VERIFIER,
 				libraryUrl: 'https://github.com/daimo-eth/p256-verifier/blob/master/src/P256Verifier.sol',
-				details: 'Daimo uses a verifier based on FreshCryptoLib for passkey verification in their P256Verifier contract.',
+				details:
+					'Daimo uses a verifier based on FreshCryptoLib for passkey verification in their P256Verifier contract.',
 				ref: [
 					{
 						url: 'https://github.com/daimo-eth/p256-verifier/blob/master/src/P256Verifier.sol',
-						explanation: 'Daimo implements P256 verification using a verifier based on FreshCryptoLib in their P256Verifier contract.'
-					}
-				]
+						explanation:
+							'Daimo implements P256 verification using a verifier based on FreshCryptoLib in their P256Verifier contract.',
+					},
+				],
 			},
 			scamAlerts: {
 				scamUrlWarning: notSupported,
@@ -119,7 +122,7 @@ export const daimo: Wallet = {
 						},
 					],
 				}),
-			}, 
+			},
 			publicSecurityAudits: [
 				{
 					auditor: veridise,
@@ -143,7 +146,7 @@ export const daimo: Wallet = {
 			hardwareWalletClearSigning: {
 				clearSigningSupport: {
 					level: ClearSigningLevel.NONE,
-					details: 'Daimo does not support hardware wallets.'
+					details: 'Daimo does not support hardware wallets.',
 				},
 				ref: null,
 			},
@@ -327,7 +330,23 @@ export const daimo: Wallet = {
 			],
 		},
 		transparency: {
-			feeTransparency: null,
+			feeTransparency: {
+				level: FeeTransparencyLevel.COMPREHENSIVE,
+				disclosesWalletFees: true,
+				showsTransactionPurpose: true,
+				ref: [
+					{
+						explanation:
+							'Daimo clearly shows transaction fees in the confirmation screen with a detailed breakdown before users approve transactions.',
+						url: 'https://github.com/daimo-eth/daimo/tree/master/apps/daimo-mobile/src/view/screen/send',
+					},
+					{
+						explanation:
+							'Daimo transparently displays transaction purpose and recipient information in a clear format.',
+						url: 'https://github.com/daimo-eth/daimo/tree/master/apps/daimo-mobile/src/view/screen/send',
+					},
+				],
+			},
 		},
 	},
 	overrides: {
